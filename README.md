@@ -1,4 +1,4 @@
-# Backend_III_PreEntrega_01
+# Backend_III_Proyecto_Final
 
 <div align="center" id="top"> 
   <img src="./src/public/img/avatar.png" alt="Backend_70075" />
@@ -8,7 +8,7 @@
   <!-- <a href="https://backend_70075.netlify.app">Demo</a> -->
 </div>
 <!-- 
-<h1 align="center">1era Pre-entrega - Backend_70075</h1>
+<h1 align="center">Proyecto Final - Backend_70075</h1>
 
 <p align="center">
   <img alt="Github top language" src="https://img.shields.io/github/languages/top/{{joamilibar}}/backend_70065?color=56BEB8">
@@ -29,62 +29,114 @@
 <!-- Status -->
 
 <h4 align="center">
-	  Backend_70075 🚀 Pre-Entrega Proyecto Final Backend Avanzado III.  
+	  Backend_70075 🚀 Proyecto Final Backend Avanzado III
 </h4>
 
 <br>
 
-## Primera Pre-Entrega Proyecto Final
+## Entrega Proyecto Final
 
-Test y Mocks.
+Dockerizando el Proyecto
 
-Creación de Mocks, generación de datos con faker y cargar a la base de datos.
+Implementación de mejoras y Dockerización del proyecto.
 
 Se cumplieron los requerimientos según las siguientes consignas:
 
   <br>
 
-<img alt="imagen consigna1" src="./src/public/img/Snapshot_preentregaIII_1.png">
-<img alt="imagen consigna2" src="./src/public/img/Snapshot_preentregaIII_2.png">
+<img alt="imagen consigna1" src="./src/public/img/Dockerizando-01.png">
+<img alt="imagen consigna2" src="./src/public/img/Dockerizando-02.png">
 
-### Generación de 50 usuarios con endpoint GET.
+### Documentación del módulo de "Users" con Swagger.
 
-[localhost:8080/api/mock/mockingusers](http://localhost:8080/api/mock/mockingusers)
-
-<img alt="imagen consigna3" src="./src/public/img/Snapshot_mockingusers_50.png">
+[http://localhost:8080/api-docs/](http://localhost:8080/api-docs/)
 
 <br>
 
-<img alt="imagen consigna3" src="./src/public/img/Snapshot_mockingusers_50_navegador.png">
+<img alt="imagen consigna3" src="./src/public/img/Swagger-Users.png">
 
 <br>
 
-<img alt="imagen consigna3" src="./src/public/img/Snapshot_preentregaIII_3.png">
+### Desarrollo de los test funcionales para todos los endpoints del router "adoption.router.js".
 
-### Desarrollo de endpoint /generatedata y comprobación mediante servicios GET de users y pets.
-
-Se desarrollo endpoint POST llamado '/generatedata' que recibe parámetros numéricos "users" y "pets" (cambiados por userCount y petsCount) para generar e insertar en la base de datos.
-
-[localhost:8080/api/mock/generatedata](http://localhost:8080/api/mock/generatedata)
-
-#### Generación y carga de datos a la base de datos:
-
-<img alt="imagen consigna3" src="./src/public/img/Snapshot_post_users_pets_01.png">
 <br>
-<img alt="imagen consigna3" src="./src/public/img/Snapshot_post_users_pets_02.png">
 
-#### Comprobación Registros Insertados:
+```bash
+# Endpoints
 
-<img alt="imagen consigna3" src="./src/public/img/Snapshot_get_users.png">
+router.get('/',adoptionsController.getAllAdoptions);
+
+router.get('/:aid',adoptionsController.getAdoption);
+
+router.post('/:uid/:pid',adoptionsController.createAdoption);
+
+# Inicio del test
+$ npm test
+
+```
+
 <br>
-<img alt="imagen consigna3" src="./src/public/img/Snapshot_get_pets.png">
+
+### Desarrollo de Dockerfile para gegenrar la imagen del proyecto.
+
+```bash
+# Utilizar una imagen base oficial de Node.js
+FROM node:18
+
+# Establecer el directorio de trabajo dentro del contenedor
+WORKDIR /app
+
+# Copiar los archivos de package.json y package-lock.json
+COPY package*.json ./
+
+# Instalar las dependencias
+RUN npm install --production
+
+# Reconstruir bcrypt para el entorno Docker
+RUN npm rebuild bcrypt --build-from-source
+
+# ENV PORT=8080
+# ENV MONGO_URL=mongodb+srv://joamilibarra:oK4kAi1laK4MdSwY@coder70065.llnur.mongodb.net/docker?retryWrites=true&w=majority&appName=Coder70065
+
+# Copiar el resto de los archivos del proyecto al contenedor
+COPY . .
+
+# Exponer el puerto en el que corre la aplicación
+EXPOSE 8080
+
+# Comando para ejecutar la aplicación
+CMD ["npm", "start"]
+```
+
+<br>
+
+### Imagen de Docker en Dockerhub
+
+```bash
+# Imagen Dockerhub
+joamilibarra/pet-adoption
+
+# Inicia tu aplicación en el puerto 8080.
+docker run -p 8080:8080 joamilibarra/pet-adoption:latest
+
+# Comando Pull Docker (descargar imagen desde Dockerhub)
+docker pull joamilibarra/pet-adoption:latest
+
+
+```
+
+<img alt="imagen consigna3" src="./src/public/img/Dockerhub-imagen.png">
+
+<br>
 
 ### Organización: Estructura de Archivos
 
     BACKEND_70075-root/
 
-```
+```bash
 └── 📁src
+    └── 📁config
+        └── database.js
     └── 📁controllers
         └── adoptions.controller.js
         └── mocking.controller.js
@@ -92,11 +144,11 @@ Se desarrollo endpoint POST llamado '/generatedata' que recibe parámetros numé
         └── sessions.controller.js
         └── users.controller.js
     └── 📁dao
+        └── Adoption.js
         └── 📁models
             └── Adoption.js
             └── Pet.js
             └── User.js
-        └── Adoption.js
         └── Pets.dao.js
         └── Users.dao.js
     └── 📁dto
@@ -109,13 +161,20 @@ Se desarrollo endpoint POST llamado '/generatedata' que recibe parámetros numé
         └── 📁img
             └── 1671549990926-coderDog.jpg
             └── avatar.png
+            └── Dockerhub-imagen.png
+            └── Dockerizando-01.png
+            └── Dockerizando-02.png
+            └── Dockerizando-03.png
             └── Snapshot_get_pets.png
             └── Snapshot_get_users.png
+            └── Snapshot_mockingusers_50_navegador.png
+            └── Snapshot_mockingusers_50.png
             └── Snapshot_post_users_pets_01.png
             └── Snapshot_post_users_pets_02.png
             └── Snapshot_preentregaIII_1.png
             └── Snapshot_preentregaIII_2.png
             └── Snapshot_preentregaIII_3.png
+            └── Swagger-Users.png
     └── 📁repository
         └── AdoptionRepository.js
         └── GenericRepository.js
@@ -129,11 +188,15 @@ Se desarrollo endpoint POST llamado '/generatedata' que recibe parámetros numé
         └── users.router.js
     └── 📁services
         └── index.js
+    └── 📁test
+        └── adoption.router.test.js
+        └── Users.test.js
     └── 📁utils
         └── error.dictionary.js
         └── error.helper.js
         └── error.utils.js
         └── index.js
+        └── swagger.js
         └── uploader.js
     └── app.js
 ```
@@ -142,13 +205,16 @@ Se desarrollo endpoint POST llamado '/generatedata' que recibe parámetros numé
 
 ```bash
 # Clonar este proyecto
-$ git clone https://github.com/Joamilibar/Backend_III_PreEnt.git
+$ git clone https://github.com/Joamilibar/backend_III_Final.git
 
 # Instalar dependencias
 $ npm install
 
 # Iniciar servidor
 $ npm start
+
+# Iniciar test
+$ npm test
 
 # El servidor inicia en: <http://localhost:8080>
 ```
@@ -164,6 +230,5 @@ by <a href="https://github.com/Joamilibar/Backend_III_PreEnt.git" target="_blank
 &#xa0;
 
 <a href="#top">Back to top</a>
-# backend_III_Final
-# backend_III_Final
+
 # backend_III_Final

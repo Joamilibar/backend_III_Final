@@ -9,24 +9,12 @@ import sessionsRouter from './routes/sessions.router.js';
 import mocksRouter from './routes/mocks.router.js';
 import setupSwagger from './utils/swagger.js';
 
-// import { env, loadEnvFile } from "node:process";
 
-// loadEnvFile("./.env");
-// console.log(env.NODE_ENV
 const app = express();
 
 const PORT = process.env.PORT || 8080;
 
 connectDB();
-//const isProduction = process.env.NODE_ENV === "production";
-
-//const MONGO_URL = process.env.MONGO_URL;
-
-// mongoose.connect(MONGO_URL)
-//     .then(() => console.log('Connected to MongoDB'))
-//     .catch((error) => console.log('Error connecting to MongoDB', error));
-
-
 
 app.use(express.urlencoded({ extended: true }));
 
